@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* グレースケール規約: chroma(彩度)を0にした仮テーマ。
+   配色が決まったら各値のchroma/hueだけ変えれば全体に反映される。 */
+@theme {
+	--color-primary: oklch(0.32 0 0);
+	--color-secondary: oklch(0.75 0 0);
+	--color-base: oklch(0.97 0 0);
+	--color-letter: oklch(0.2 0 0);
+}

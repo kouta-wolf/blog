@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => {
+	return import.meta.env.PROD ? !data.draft : true;
+});
+
+const posts = allPosts
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+	.map((entry) => ({
+		slug: entry.id,
+		title: entry.data.title,
+		date: entry.data.date,
+		tags: entry.data.tags,
+	}));
+---
+
+<Layout title="HexWolf Blog">
+	<main class="max-w-2xl mx-auto px-4 py-12">
+		<h1 class="text-3xl font-bold mb-8">HexWolf Blog</h1>
+		<ul class="flex flex-col gap-6">
+			{
+				posts.map((post) => (
+					<li class="border-b border-secondary pb-6">
+						<a href={`/posts/${post.slug}/`} class="text-xl font-bold hover:opacity-70 transition">
+							{post.title}
+						</a>
+						<div class="flex items-center gap-3 mt-2 text-sm text-secondary">
+							<time datetime={post.date.toISOString()}>
+								{post.date.toLocaleDateString('ja-JP')}
+							</time>
+							{post.tags?.map((tag) => (
+								<span class="px-2 py-0.5 bg-secondary/20 rounded">{tag}</span>
+							))}
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</main>
+</Layout>
