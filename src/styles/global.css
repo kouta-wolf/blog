@@ -1,11 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* グレースケール規約: chroma(彩度)を0にした仮テーマ。
-   配色が決まったら各値のchroma/hueだけ変えれば全体に反映される。 */
+/* 和色パレット(ライトテーマ)。値は各色のHEXをoklchに変換したもの。
+   primary:   瑠璃紺(るりこん) #1e50a2   - ロゴ・リンク・ボーダーのアクセント
+   secondary: 瑠璃紺と同じ色相(260°)で彩度を落とした補助グレー
+   base:      銀白色(ぎんはくしょく) #f6f6f6 - ページ背景
+   letter:    蒼黒(そうこく) #000023       - 本文の文字色、フッター背景 */
 @theme {
-	--color-primary: oklch(0.32 0 0);
-	--color-secondary: oklch(0.75 0 0);
+	--color-primary: oklch(0.45 0.143 260);
+	--color-secondary: oklch(0.5 0.03 260);
 	--color-base: oklch(0.97 0 0);
-	--color-letter: oklch(0.2 0 0);
+	--color-letter: oklch(0.12 0.08 264);
+}
+
+/* 本文中の見出し(h2, h3...)だけ瑠璃紺にする。他のprose要素は後で(コードブロック実装時に)調整する */
+.prose.prose-neutral {
+	--tw-prose-headings: var(--color-primary);
+}
+
+.prose.prose-neutral h2 {
+	border-bottom: 2px solid var(--color-primary);
+	padding-bottom: 0.3em;
 }
