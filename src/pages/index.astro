@@ -1,42 +1,79 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
 
-const allPosts = await getCollection('posts', ({ data }) => {
-	return import.meta.env.PROD ? !data.draft : true;
+const allPosts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
 });
 
 const posts = allPosts
-	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-	.map((entry) => ({
-		slug: entry.id,
-		title: entry.data.title,
-		date: entry.data.date,
-		tags: entry.data.tags,
-	}));
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .map((entry) => ({
+        slug: entry.id,
+        title: entry.data.title,
+        date: entry.data.date,
+        tags: entry.data.tags,
+    }));
+
+const tags = [...new Set(posts.flatMap((post) => post.tags ?? []))].sort();
 ---
 
 <Layout title="HexWolf Blog">
-	<main class="max-w-2xl mx-auto px-4 py-12">
-		<h1 class="text-3xl font-bold mb-8 text-primary">HexWolf Blog</h1>
-		<ul class="flex flex-col gap-6">
-			{
-				posts.map((post) => (
-					<li class="border-b border-secondary pb-6">
-						<a href={`/posts/${post.slug}/`} class="text-xl font-bold hover:opacity-70 transition">
-							{post.title}
-						</a>
-						<div class="flex items-center gap-3 mt-2 text-sm text-secondary">
-							<time datetime={post.date.toISOString()}>
-								{post.date.toLocaleDateString('ja-JP')}
-							</time>
-							{post.tags?.map((tag) => (
-								<span class="px-2 py-0.5 bg-secondary/20 rounded">{tag}</span>
-							))}
-						</div>
-					</li>
-				))
-			}
-		</ul>
-	</main>
+    <main
+        class="max-w-5xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10"
+    >
+        <div class="lg:col-span-2">
+            <ul class="flex flex-col gap-4">
+                {
+                    posts.map((post) => (
+                        <li class="border border-secondary/40 rounded-lg p-5 hover:border-primary transition">
+                            <a
+                                href={`/posts/${post.slug}/`}
+                                class="text-xl font-bold hover:opacity-70 transition"
+                            >
+                                {post.title}
+                            </a>
+                            <div class="flex items-center gap-3 mt-2 text-sm text-secondary">
+                                <time datetime={post.date.toISOString()}>
+                                    {post.date.toLocaleDateString("ja-JP")}
+                                </time>
+                                {post.tags?.map((tag) => (
+                                    <span class="px-2 py-0.5 bg-secondary/20 rounded">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+        <aside class="flex flex-col gap-8">
+            <section>
+                <h2 class="text-lg font-bold mb-3 text-primary">About</h2>
+                <p class="text-sm text-letter leading-relaxed">
+                    好きな言語はRuby。プログラミング学習中です。詳しいプロフィールは
+                    <a
+                        href="https://portfolio.koutaookami18.workers.dev"
+                        class="text-primary underline hover:opacity-70 transition"
+                    >
+                        ポートフォリオ
+                    </a>
+                    へ。
+                </p>
+            </section>
+            <section>
+                <h2 class="text-lg font-bold mb-3 text-primary">Tags</h2>
+                <div class="flex flex-wrap gap-2">
+                    {
+                        tags.map((tag) => (
+                            <span class="px-2 py-0.5 text-sm bg-secondary/20 rounded">
+                                {tag}
+                            </span>
+                        ))
+                    }
+                </div>
+            </section>
+        </aside>
+    </main>
 </Layout>
