@@ -22,3 +22,19 @@
 	border-bottom: 2px solid var(--color-primary);
 	padding-bottom: 0.3em;
 }
+
+/* インラインコード(`code`)。Typographyプラグインの既定は前後に``を疑似要素で
+   表示するだけで背景色が無いため、地の文とほぼ見分けがつかない。
+   バッククォートは非表示にして、色付きの背景で囲んで区別できるようにする */
+.prose.prose-neutral code {
+	background-color: color-mix(in oklch, var(--color-primary) 10%, transparent);
+	color: var(--color-primary);
+	padding: 0.15em 0.4em;
+	border-radius: 0.35em;
+	font-weight: 500;
+}
+
+.prose.prose-neutral code::before,
+.prose.prose-neutral code::after {
+	content: none;
+}
