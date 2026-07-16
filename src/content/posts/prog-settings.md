@@ -28,7 +28,7 @@ tags: ["雑記"]
 | Webカメラ | Ankerの定番 |
 | Webブラウザ | Vivaldi, Chrome |
 | 記録管理 | Obsidian |
-| 開発ツール | Zed(最近VSCodeから移行) |
+| 開発ツール | neovim + tmux(さらに変更) |
 | 開発環境 | WSL |
 | ランチャー | Raycast Claunch |
 | 通話 | Discord |
