@@ -1,21 +1,33 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const allPosts = await getCollection("posts", ({ data }) => {
+        return import.meta.env.PROD ? !data.draft : true;
+    });
+
+    const posts = allPosts
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+        .map((entry) => ({
+            slug: entry.id,
+            title: entry.data.title,
+            date: entry.data.date,
+            tags: entry.data.tags,
+        }));
+
+    return paginate(posts, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
 
 const allPosts = await getCollection("posts", ({ data }) => {
     return import.meta.env.PROD ? !data.draft : true;
 });
-
-const posts = allPosts
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-    .map((entry) => ({
-        slug: entry.id,
-        title: entry.data.title,
-        date: entry.data.date,
-        tags: entry.data.tags,
-    }));
-
-const tags = [...new Set(posts.flatMap((post) => post.tags ?? []))].sort();
+const tags = [
+    ...new Set(allPosts.flatMap((entry) => entry.data.tags ?? [])),
+].sort();
 ---
 
 <Layout title="HexWolf Blog">
@@ -25,7 +37,7 @@ const tags = [...new Set(posts.flatMap((post) => post.tags ?? []))].sort();
         <div class="lg:col-span-2">
             <ul class="flex flex-col gap-4">
                 {
-                    posts.map((post) => (
+                    page.data.map((post) => (
                         <li class="border border-secondary/40 rounded-lg p-5 hover:border-primary transition">
                             <a
                                 href={`/posts/${post.slug}/`}
@@ -47,6 +59,38 @@ const tags = [...new Set(posts.flatMap((post) => post.tags ?? []))].sort();
                     ))
                 }
             </ul>
+            {
+                page.lastPage > 1 && (
+                    <nav
+                        class="flex items-center justify-between mt-8"
+                        aria-label="Pagination"
+                    >
+                        {page.url.prev ? (
+                            <a
+                                href={page.url.prev}
+                                class="px-4 py-2 text-sm border border-secondary/40 rounded-lg hover:border-primary transition"
+                            >
+                                ← 前へ
+                            </a>
+                        ) : (
+                            <span />
+                        )}
+                        <span class="text-sm text-secondary">
+                            {page.currentPage} / {page.lastPage}
+                        </span>
+                        {page.url.next ? (
+                            <a
+                                href={page.url.next}
+                                class="px-4 py-2 text-sm border border-secondary/40 rounded-lg hover:border-primary transition"
+                            >
+                                次へ →
+                            </a>
+                        ) : (
+                            <span />
+                        )}
+                    </nav>
+                )
+            }
         </div>
         <aside class="flex flex-col gap-8">
             <section>
