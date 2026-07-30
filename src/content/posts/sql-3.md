@@ -1,5 +1,5 @@
 ---
-title: "SQL学習シリーズ：ORDER BY句"
+title: "SQL学習シリーズ③：ORDER BY句"
 date: 2026-07-30
 tags: ["SQL", "学習ノート"]
 ---
