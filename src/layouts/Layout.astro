@@ -1,28 +1,114 @@
 ---
+import { Font } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { site } from '../site.config';
 
 interface Props {
-	title: string;
+	title?: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = '日々の学びや雑記を書いている個人ブログです。' } = Astro.props;
+const pageTitle = title ? `${title} | ${site.title}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="ja">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:site_name" content={site.title} />
+		<!-- 日本語フォントはサブセットが多く preload すると逆効果なので、等幅フォントだけ preload する -->
+		<Font cssVariable="--font-noto-sans-jp" />
+		<Font cssVariable="--font-jetbrains-mono" preload />
 	</head>
-	<body class="bg-base text-letter min-h-screen flex flex-col">
-		<Header />
-		<div class="pt-16 flex-1">
-			<slot />
+	<body>
+		<a href="#main" class="skip-link">本文へスキップ</a>
+		<div class="shell">
+			<Header />
+			<div class="columns">
+				<main id="main">
+					<slot />
+				</main>
+				<aside class="sidebar">
+					<slot name="sidebar" />
+				</aside>
+			</div>
+			<Footer />
 		</div>
-		<Footer />
 	</body>
 </html>
+
+<style>
+	.shell {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+		max-width: var(--layout-max);
+		margin: 0 auto;
+		padding: 16px 20px 64px;
+	}
+
+	/* DOM はメイン→サイドバーの順。PC では grid でサイドバーを左に置き、スマホではそのまま下に回る */
+	.columns {
+		display: grid;
+		grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+		grid-template-areas: 'sidebar main';
+		gap: var(--gap);
+		align-items: start;
+	}
+
+	main {
+		grid-area: main;
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+		min-width: 0;
+	}
+
+	.sidebar {
+		grid-area: sidebar;
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+	}
+
+	@media (max-width: 860px) {
+		.columns {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas: 'main' 'sidebar';
+		}
+	}
+
+	@media (max-width: 480px) {
+		.shell {
+			padding: 12px 12px 48px;
+		}
+	}
+
+	.skip-link {
+		position: absolute;
+		top: 8px;
+		left: 8px;
+		z-index: 10;
+		padding: 8px 16px;
+		border-radius: var(--radius-control);
+		background: var(--color-accent);
+		color: var(--color-on-accent);
+		transform: translateY(-200%);
+	}
+
+	.skip-link:focus {
+		transform: none;
+	}
+</style>

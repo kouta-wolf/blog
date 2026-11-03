@@ -1,6 +1,21 @@
 ---
 ---
 
-<footer class="w-full h-16 bg-letter text-base flex items-center justify-center">
-	<p>&copy; 2026 HexWolf. All rights reserved.</p>
+<footer class="footer mono">
+	© 2026 hexwolf · <a href="/rss.xml">RSS</a> · <a href="/sitemap-index.xml">Sitemap</a>
 </footer>
+
+<style>
+	/* ページ背景の上に直接載るので、muted ではなくコントラスト比を満たす sub を使う */
+	.footer {
+		padding-top: 16px;
+		text-align: center;
+		font-size: 13px;
+		color: var(--color-sub);
+	}
+
+	a {
+		display: inline-block;
+		padding: 12px 4px;
+	}
+</style>

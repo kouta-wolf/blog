@@ -1,40 +1,91 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
+/* デザイントークン。色は必ずここの変数を経由して使う(ダークモード追加時はここだけ差し替える) */
+:root {
+	--color-bg: #eef1f6; /* ページ背景 */
+	--color-card: #ffffff; /* カード背景 */
+	--color-text: #1e2329; /* 見出し・強い文字 */
+	--color-body: #2e343c; /* 本文 */
+	--color-sub: #535b66; /* 補助テキスト */
+	--color-muted: #69717e; /* 日付など。ページ背景の上ではコントラスト不足なのでカード上でのみ使う */
+	--color-chip: #f1f4f8; /* インラインコード・ボタン背景 */
+	--color-line: #e3e7ee; /* 区切り線 */
+	--color-accent: #2f6db5; /* リンク・カテゴリ */
+	--color-accent-soft: #e5eef9; /* アクセントの薄い背景 */
+	--color-on-accent: #ffffff; /* アクセント背景の上の文字 */
 
-/* 和色パレット(ライトテーマ)。値は各色のHEXをoklchに変換したもの。
-   primary:   瑠璃紺(るりこん) #1e50a2   - ロゴ・リンク・ボーダーのアクセント
-   secondary: 瑠璃紺と同じ色相(260°)で彩度を落とした補助グレー
-   base:      銀白色(ぎんはくしょく) #f6f6f6 - ページ背景
-   letter:    蒼黒(そうこく) #000023       - 本文の文字色、フッター背景 */
-@theme {
-	--color-primary: oklch(0.45 0.143 260);
-	--color-secondary: oklch(0.5 0.03 260);
-	--color-base: oklch(0.97 0 0);
-	--color-letter: oklch(0.12 0.08 264);
+	--font-sans: var(--font-noto-sans-jp), system-ui, sans-serif;
+	--font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+	--radius-card: 16px;
+	--radius-control: 10px;
+	--gap: 20px;
+	--layout-max: 1120px;
+	--sidebar-width: 270px;
+	--tap-size: 44px;
 }
 
-/* 本文中の見出し(h2, h3...)だけ瑠璃紺にする。他のprose要素は後で(コードブロック実装時に)調整する */
-.prose.prose-neutral {
-	--tw-prose-headings: var(--color-primary);
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
-.prose.prose-neutral h2 {
-	border-bottom: 2px solid var(--color-primary);
-	padding-bottom: 0.3em;
+html {
+	-webkit-text-size-adjust: 100%;
 }
 
-/* インラインコード(`code`)。Typographyプラグインの既定は前後に``を疑似要素で
-   表示するだけで背景色が無いため、地の文とほぼ見分けがつかない。
-   バッククォートは非表示にして、色付きの背景で囲んで区別できるようにする */
-.prose.prose-neutral code {
-	background-color: color-mix(in oklch, var(--color-primary) 10%, transparent);
-	color: var(--color-primary);
-	padding: 0.15em 0.4em;
-	border-radius: 0.35em;
-	font-weight: 500;
+body {
+	margin: 0;
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 1.8;
 }
 
-.prose.prose-neutral code::before,
-.prose.prose-neutral code::after {
-	content: none;
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol {
+	margin: 0;
+}
+
+.card {
+	background: var(--color-card);
+	border-radius: var(--radius-card);
+}
+
+.mono {
+	font-family: var(--font-mono);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }

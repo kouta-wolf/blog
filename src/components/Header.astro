@@ -1,8 +1,90 @@
 ---
+const items = [
+	{ label: 'ホーム', href: '/', match: (path: string) => path === '/' || /^\/\d+\/$/.test(path) },
+	{ label: 'アーカイブ', href: '/archive/', match: (path: string) => path.startsWith('/archive/') },
+	{ label: 'About', href: '/about/', match: (path: string) => path.startsWith('/about/') },
+];
+
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 ---
 
-<header class="fixed top-0 left-0 z-50 w-full h-16 bg-base text-letter border-b-2 border-primary flex items-center">
-	<div class="m-6">
-		<a href="/" class="text-2xl font-bold text-primary">HexWolf Blog</a>
-	</div>
+<header class="card header">
+	<a href="/" class="site-name mono"><span class="accent">~/</span>hexwolf<span class="dim">/blog</span></a>
+	<nav aria-label="メインメニュー">
+		<ul>
+			{
+				items.map((item) => {
+					const current = item.match(path);
+					return (
+						<li>
+							<a href={item.href} aria-current={current ? 'page' : undefined}>
+								{item.label}
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</nav>
 </header>
+
+<style>
+	.header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		min-height: 64px;
+		padding: 0 24px;
+	}
+
+	.site-name {
+		font-size: 18px;
+		font-weight: 500;
+		color: var(--color-text);
+	}
+
+	.accent {
+		color: var(--color-accent);
+	}
+
+	.dim {
+		color: var(--color-muted);
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		padding: 0;
+		list-style: none;
+	}
+
+	nav a {
+		display: flex;
+		align-items: center;
+		min-height: var(--tap-size);
+		padding: 0 14px;
+		border-radius: var(--radius-control);
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--color-sub);
+	}
+
+	nav a:hover {
+		text-decoration: none;
+		background: var(--color-chip);
+	}
+
+	nav a[aria-current='page'] {
+		color: var(--color-accent);
+		background: var(--color-accent-soft);
+	}
+
+	@media (max-width: 480px) {
+		.header {
+			padding: 8px 16px;
+		}
+	}
+</style>

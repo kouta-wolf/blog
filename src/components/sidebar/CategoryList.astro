@@ -1,0 +1,65 @@
+---
+import Icon from '../Icon.astro';
+import { categories } from '../../site.config';
+
+const path = Astro.url.pathname;
+---
+
+<nav aria-label="カテゴリ" class="card categories">
+	<h2>カテゴリ</h2>
+	<ul>
+		{
+			categories.map((category) => {
+				const href = `/categories/${category.slug}/`;
+				return (
+					<li>
+						<a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>
+							<span>{category.name}</span>
+							<Icon name="chevron-right" size={16} />
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</nav>
+
+<style>
+	.categories {
+		padding: 20px 16px;
+	}
+
+	h2 {
+		margin: 0 8px 8px;
+		font-size: 16px;
+	}
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 0;
+		list-style: none;
+	}
+
+	a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: var(--tap-size);
+		padding: 0 10px;
+		border-radius: var(--radius-control);
+		font-size: 15px;
+		color: var(--color-sub);
+	}
+
+	a:hover {
+		text-decoration: none;
+		background: var(--color-chip);
+	}
+
+	a[aria-current='page'] {
+		color: var(--color-accent);
+		background: var(--color-accent-soft);
+	}
+</style>
