@@ -1,0 +1,137 @@
+/* 記事本文(Markdown から生成される HTML)のスタイル */
+.prose {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	color: var(--color-body);
+	font-size: 16px;
+	line-height: 1.8;
+	overflow-wrap: anywhere;
+}
+
+.prose > * {
+	margin: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+	color: var(--color-text);
+	line-height: 1.5;
+	/* 見出しへジャンプしたとき、画面上端に張り付かないようにする */
+	scroll-margin-top: 20px;
+}
+
+.prose h2 {
+	margin-top: 16px;
+	font-size: 22px;
+}
+
+.prose h3 {
+	margin-top: 8px;
+	font-size: 18px;
+}
+
+.prose h4 {
+	font-size: 16px;
+}
+
+.prose a {
+	color: var(--color-accent);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.prose strong {
+	color: var(--color-text);
+}
+
+.prose ul,
+.prose ol {
+	padding-left: 1.5em;
+}
+
+.prose li + li {
+	margin-top: 4px;
+}
+
+.prose :not(pre) > code {
+	padding: 2px 6px;
+	border-radius: 6px;
+	background: var(--color-chip);
+	color: var(--color-text);
+	font-family: var(--font-mono);
+	font-size: 0.875em;
+}
+
+.prose img {
+	height: auto;
+	border-radius: 12px;
+}
+
+.prose hr {
+	width: 100%;
+	border: 0;
+	border-top: 1px solid var(--color-line);
+}
+
+.prose blockquote {
+	padding: 4px 0 4px 16px;
+	border-left: 3px solid var(--color-line);
+	color: var(--color-sub);
+}
+
+/* 表は横にはみ出すとレイアウトが崩れるので、表だけ横スクロールさせる */
+.prose table {
+	display: block;
+	max-width: 100%;
+	overflow-x: auto;
+	border-collapse: collapse;
+	font-size: 15px;
+}
+
+.prose th,
+.prose td {
+	padding: 8px 12px;
+	border: 1px solid var(--color-line);
+	text-align: left;
+}
+
+.prose th {
+	background: var(--color-chip);
+	color: var(--color-text);
+	white-space: nowrap;
+}
+
+/* 注意書き(remark-callouts.mjs で生成) */
+.prose .callout {
+	display: flex;
+	gap: 12px;
+	padding: 16px 18px;
+	border-radius: 12px;
+	background: var(--color-accent-soft);
+}
+
+.prose .callout-icon {
+	flex-shrink: 0;
+	padding-top: 2px;
+	color: var(--color-accent);
+}
+
+.prose .callout-body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+	font-size: 15px;
+}
+
+.prose .callout-body > * {
+	margin: 0;
+}
+
+.prose .callout-title {
+	color: var(--color-accent);
+	font-size: 14px;
+	font-weight: 700;
+}

@@ -12,6 +12,17 @@
 	--color-accent-soft: #e5eef9; /* アクセントの薄い背景 */
 	--color-on-accent: #ffffff; /* アクセント背景の上の文字 */
 
+	/* コードブロック(ライトモードでも暗い背景) */
+	--code-bg: #181c23;
+	--code-header-bg: #20252e;
+	--code-border: #2a303b;
+	--code-text: #d6dce4;
+	--code-sub: #9aa4b2;
+	--code-line-number: #7c8696;
+	--code-dot: #3a414d;
+	--code-accent: #82b4ef;
+	--code-mark: rgb(130 180 239 / 0.14);
+
 	--font-sans: var(--font-noto-sans-jp), system-ui, sans-serif;
 	--font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 

@@ -49,3 +49,9 @@ export function getExcerpt(post: Post, length = 120): string {
 		.trim();
 	return text.length > length ? `${text.slice(0, length)}…` : text;
 }
+
+// 読了時間の目安(分)。日本語は1分あたり約500文字として、コードブロックは除いて数える
+export function getReadingMinutes(post: Post): number {
+	const text = (post.body ?? '').replace(/^(`{3,}|~{3,})[\s\S]*?^\1/gm, '').replace(/\s+/g, '');
+	return Math.max(1, Math.round(text.length / 500));
+}

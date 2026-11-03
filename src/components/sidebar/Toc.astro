@@ -1,0 +1,105 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+	headings: MarkdownHeading[];
+}
+
+// h2・h3 だけを対象にし、2つ未満なら目次を出さない
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+	items.length >= 2 && (
+		<nav aria-label="目次" class="card toc">
+			<h2>目次</h2>
+			<ul>
+				{items.map((h) => (
+					<li class:list={[`depth-${h.depth}`]}>
+						<a href={`#${h.slug}`}>{h.text}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
+
+<script>
+	// 今読んでいる見出しを目次でハイライトする(画面上端付近を通過した最後の見出し)
+	const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+	const targets = links
+		.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+		.filter((el): el is HTMLElement => el !== null);
+
+	if (targets.length > 0) {
+		let ticking = false;
+		const update = () => {
+			ticking = false;
+			let current = 0;
+			targets.forEach((el, i) => {
+				if (el.getBoundingClientRect().top < 120) current = i;
+			});
+			links.forEach((link, i) => {
+				if (i === current) link.setAttribute('aria-current', 'location');
+				else link.removeAttribute('aria-current');
+			});
+		};
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (!ticking) {
+					ticking = true;
+					requestAnimationFrame(update);
+				}
+			},
+			{ passive: true },
+		);
+		update();
+	}
+</script>
+
+<style>
+	.toc {
+		padding: 20px 16px;
+	}
+
+	h2 {
+		margin: 0 8px 8px;
+		font-size: 16px;
+	}
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 0;
+		list-style: none;
+	}
+
+	a {
+		display: flex;
+		align-items: center;
+		min-height: var(--tap-size);
+		padding: 6px 10px;
+		border-radius: 8px;
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--color-sub);
+	}
+
+	.depth-3 a {
+		padding-left: 26px;
+		font-size: 13px;
+	}
+
+	a:hover {
+		text-decoration: none;
+		background: var(--color-chip);
+	}
+
+	a[aria-current='location'] {
+		color: var(--color-accent);
+		background: var(--color-accent-soft);
+		font-weight: 500;
+	}
+</style>
