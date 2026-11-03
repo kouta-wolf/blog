@@ -1,6 +1,7 @@
 ---
 title: "SQL学習シリーズ②：WHERE句"
 date: 2026-07-22
+category: "学習ノート"
 tags: ["SQL", "学習ノート"]
 ---
 

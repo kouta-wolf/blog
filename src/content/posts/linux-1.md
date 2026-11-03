@@ -1,6 +1,7 @@
 ---
 title: "Linuxの初期設定一覧"
 date: 2026-08-29
+category: "学習ノート"
 tags: ["Linux", "学習ノート"]
 ---
 

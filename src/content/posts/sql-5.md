@@ -1,6 +1,7 @@
 ---
 title: "SQL学習シリーズ⑤：JOIN句"
 date: 2026-08-04
+category: "学習ノート"
 tags: ["SQL", "学習ノート"]
 ---
 

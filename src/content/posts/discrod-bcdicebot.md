@@ -1,6 +1,7 @@
 ---
 title: "サーバーレスでBCDiceBotを作ってみた"
 date: 2026-07-12
+category: "雑記"
 tags: ["Claude Code", "雑記"]
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "SQL学習シリーズ④：GROUP BY句"
 date: 2026-07-30
+category: "学習ノート"
 tags: ["SQL", "学習ノート"]
 ---
 

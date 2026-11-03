@@ -1,6 +1,7 @@
 ---
 title: "デュアルブートのLinuxを2日で辞めた話"
 date: 2026-07-19
+category: "開発環境"
 tags: ["雑記", "Linux"]
 ---
 

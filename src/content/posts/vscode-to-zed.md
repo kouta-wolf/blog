@@ -1,6 +1,7 @@
 ---
 title: "VSCodeからZedへ と思ったらneovimまで飛んだ話"
 date: 2026-07-16
+category: "開発環境"
 tags: ["雑記", "エディタ"]
 ---
 

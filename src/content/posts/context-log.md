@@ -1,6 +1,7 @@
 ---
 title: "Claude Codeの使用量超過を2回やらかした話"
 date: 2026-07-11
+category: "AI"
 tags: ["Claude Code", "雑記"]
 ---
 
