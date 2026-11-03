@@ -1,0 +1,37 @@
+---
+import { tagHref } from '../../lib/posts';
+
+interface Props {
+	tags?: string[];
+}
+
+const { tags = [] } = Astro.props;
+---
+
+{
+	tags.length > 0 && (
+		<ul class="tags mono" aria-label="タグ">
+			{tags.map((tag) => (
+				<li>
+					<a href={tagHref(tag)} class="tap-target">#{tag}</a>
+				</li>
+			))}
+		</ul>
+	)
+}
+
+<style>
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 12px;
+		padding: 0;
+		list-style: none;
+		font-size: 13px;
+		color: var(--color-muted);
+	}
+
+	a:hover {
+		color: var(--color-accent);
+	}
+</style>

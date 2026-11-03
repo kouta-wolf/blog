@@ -89,3 +89,16 @@ ol {
 	clip-path: inset(50%);
 	white-space: nowrap;
 }
+
+/* 見た目は小さいままクリック範囲だけを高さ 44px まで広げる(タグやカテゴリチップなど) */
+.tap-target {
+	position: relative;
+	display: inline-block;
+}
+
+.tap-target::after {
+	content: '';
+	position: absolute;
+	inset-block: min(0px, calc((100% - var(--tap-size)) / 2));
+	inset-inline: -4px;
+}

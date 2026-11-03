@@ -3,8 +3,11 @@ import type { GetStaticPaths } from 'astro';
 import Layout from '../layouts/Layout.astro';
 import ProfileCard from '../components/sidebar/ProfileCard.astro';
 import CategoryList from '../components/sidebar/CategoryList.astro';
-import { getPublishedPosts, formatDate } from '../lib/posts';
+import PostCard from '../components/post/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { getPublishedPosts } from '../lib/posts';
 
+// URL は /, /2/, /3/ ...(既存のページ送りの URL を維持する)
 export const getStaticPaths = (async ({ paginate }) => {
 	const posts = await getPublishedPosts();
 	return paginate(posts, { pageSize: 10 });
@@ -13,16 +16,10 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 ---
 
-<Layout>
-	<ul>
-		{
-			page.data.map((post) => (
-				<li>
-					<a href={`/posts/${post.id}/`}>{post.data.title}</a> <span class="mono">{formatDate(post.data.date)}</span>
-				</li>
-			))
-		}
-	</ul>
+<Layout title={page.currentPage > 1 ? `${page.currentPage}ページ目` : undefined}>
+	<h1 class="visually-hidden">記事一覧</h1>
+	{page.data.map((post) => <PostCard post={post} />)}
+	<Pagination currentPage={page.currentPage} lastPage={page.lastPage} />
 	<ProfileCard slot="sidebar" />
 	<CategoryList slot="sidebar" />
 </Layout>
