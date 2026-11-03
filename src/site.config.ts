@@ -14,7 +14,7 @@ export const site = {
 export const profile = {
 	name: 'オオカミ',
 	// ひとこと紹介(サイドバーのプロフィールカードに表示)
-	bio: '好きな言語はRuby。プログラミング学習中です。',
+	bio: '好きな言語はRust。プログラミング学習中です。',
 	// アバター画像のパス(例: '/images/avatar.png')。未設定なら avatarText を表示する
 	avatar: undefined as string | undefined,
 	avatarText: '狼',
