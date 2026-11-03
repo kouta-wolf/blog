@@ -3,6 +3,7 @@
 export const site = {
 	title: 'HexWolf Blog',
 	url: 'https://blog.hexwolf.org',
+	description: '日々の学びや雑記を書いている個人ブログです。',
 	author: 'オオカミ',
 	license: {
 		name: 'CC BY-NC-SA 4.0',

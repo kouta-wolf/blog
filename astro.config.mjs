@@ -4,6 +4,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 import expressiveCode from 'astro-expressive-code';
+import sitemap from '@astrojs/sitemap';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import remarkCallouts from './src/lib/remark-callouts.mjs';
 
@@ -60,7 +61,8 @@ export default defineConfig({
           highlightForeground: 'var(--code-accent)'
         }
       }
-    })
+    }),
+    sitemap()
   ],
 
   markdown: {

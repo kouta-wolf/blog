@@ -24,7 +24,8 @@ const { tags = [] } = Astro.props;
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0 12px;
+		/* 折り返した行どうしで 44px のクリック範囲が重ならない行間 */
+		gap: 21px 12px;
 		padding: 0;
 		list-style: none;
 		font-size: 13px;

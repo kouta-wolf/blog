@@ -55,3 +55,17 @@ export function getReadingMinutes(post: Post): number {
 	const text = (post.body ?? '').replace(/^(`{3,}|~{3,})[\s\S]*?^\1/gm, '').replace(/\s+/g, '');
 	return Math.max(1, Math.round(text.length / 500));
 }
+
+// 全タグを slug ごとにまとめる(表記の大小違いは同じタグとして扱う)
+export function getTags(posts: Post[]): { name: string; slug: string; posts: Post[] }[] {
+	const map = new Map<string, { name: string; slug: string; posts: Post[] }>();
+	for (const post of posts) {
+		for (const tag of post.data.tags ?? []) {
+			const slug = tagSlug(tag);
+			const entry = map.get(slug) ?? { name: tag, slug, posts: [] };
+			entry.posts.push(post);
+			map.set(slug, entry);
+		}
+	}
+	return [...map.values()].sort((a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name, 'ja'));
+}

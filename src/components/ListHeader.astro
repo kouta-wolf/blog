@@ -1,0 +1,57 @@
+---
+// カテゴリ・タグ・アーカイブなど一覧ページの見出しカード
+interface Props {
+	label: string; // 例: 「カテゴリ」
+	title: string;
+	description?: string;
+	count?: number;
+}
+
+const { label, title, description, count } = Astro.props;
+---
+
+<header class="card list-header">
+	<span class="label">{label}</span>
+	<h1>{title}</h1>
+	{description && <p class="description">{description}</p>}
+	{count !== undefined && <p class="count mono">{count} posts</p>}
+</header>
+
+<style>
+	.list-header {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 28px 32px;
+	}
+
+	.label {
+		font-size: 13px;
+		color: var(--color-muted);
+	}
+
+	h1 {
+		font-size: 26px;
+		line-height: 1.45;
+	}
+
+	.description {
+		font-size: 15px;
+		color: var(--color-sub);
+	}
+
+	.count {
+		font-size: 13px;
+		color: var(--color-muted);
+	}
+
+	@media (max-width: 480px) {
+		.list-header {
+			padding: 20px;
+		}
+
+		h1 {
+			font-size: 22px;
+		}
+	}
+</style>

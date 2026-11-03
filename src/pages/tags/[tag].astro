@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ListHeader from '../../components/ListHeader.astro';
+import PostCard from '../../components/post/PostCard.astro';
+import ProfileCard from '../../components/sidebar/ProfileCard.astro';
+import CategoryList from '../../components/sidebar/CategoryList.astro';
+import TagCloud from '../../components/sidebar/TagCloud.astro';
+import { getPublishedPosts, getTags } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const tags = getTags(await getPublishedPosts());
+	return tags.map((tag) => ({
+		params: { tag: tag.slug },
+		props: { tag },
+	}));
+}
+
+const { tag } = Astro.props;
+---
+
+<Layout title={`タグ: #${tag.name}`} description={`「${tag.name}」タグの付いた記事の一覧`}>
+	<ListHeader label="タグ" title={`#${tag.name}`} count={tag.posts.length} />
+	{tag.posts.map((post) => <PostCard post={post} />)}
+	<ProfileCard slot="sidebar" variant="compact" />
+	<CategoryList slot="sidebar" />
+	<TagCloud slot="sidebar" />
+</Layout>

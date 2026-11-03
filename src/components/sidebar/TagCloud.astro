@@ -1,0 +1,62 @@
+---
+import { getPublishedPosts, getTags } from '../../lib/posts';
+
+const tags = getTags(await getPublishedPosts());
+const path = decodeURIComponent(Astro.url.pathname);
+---
+
+<nav aria-label="タグ" class="card tag-cloud">
+	<h2>タグ</h2>
+	<ul class="mono">
+		{
+			tags.map((tag) => {
+				const href = `/tags/${tag.slug}/`;
+				return (
+					<li>
+						<a href={href} class="tap-target" aria-current={path === href ? 'page' : undefined}>
+							#{tag.name}
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</nav>
+
+<style>
+	.tag-cloud {
+		padding: 20px 24px 24px;
+	}
+
+	h2 {
+		margin-bottom: 12px;
+		font-size: 16px;
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		/* 折り返した行どうしで 44px のクリック範囲が重ならない行間 */
+		gap: 14px 8px;
+		padding: 0;
+		list-style: none;
+		font-size: 13px;
+	}
+
+	a {
+		padding: 4px 10px;
+		border-radius: 8px;
+		background: var(--color-chip);
+		color: var(--color-sub);
+	}
+
+	a:hover {
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	a[aria-current='page'] {
+		background: var(--color-accent-soft);
+		color: var(--color-accent);
+	}
+</style>
