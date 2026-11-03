@@ -1,7 +1,7 @@
-
 ---
 title: "DB学習シリーズ1：RAID構成"
 date: 2026-08-09
+category: "学習ノート"
 tags: ["DB", "学習ノート"]
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "SQL学習シリーズ①：SELECT句"
 date: 2026-07-21
+category: "学習ノート"
 tags: ["SQL", "学習ノート"]
 ---
 

@@ -1,0 +1,82 @@
+---
+import { postHref, type Post } from '../../lib/posts';
+
+interface Props {
+	prev?: Post; // 1つ古い記事
+	next?: Post; // 1つ新しい記事
+}
+
+const { prev, next } = Astro.props;
+---
+
+{
+	(prev || next) && (
+		<nav aria-label="前後の記事" class="prev-next">
+			{prev ? (
+				<a href={postHref(prev)} class="card item" rel="prev">
+					<span class="label">← 前の記事</span>
+					<span class="title">{prev.data.title}</span>
+				</a>
+			) : (
+				<span class="spacer" />
+			)}
+			{next ? (
+				<a href={postHref(next)} class="card item next" rel="next">
+					<span class="label">次の記事 →</span>
+					<span class="title">{next.data.title}</span>
+				</a>
+			) : (
+				<span class="spacer" />
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.prev-next {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap);
+	}
+
+	.item,
+	.spacer {
+		flex: 1 1 260px;
+	}
+
+	.item {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 18px 22px;
+	}
+
+	.item:hover {
+		text-decoration: none;
+	}
+
+	.item:hover .title {
+		color: var(--color-accent);
+	}
+
+	.next {
+		text-align: right;
+	}
+
+	.label {
+		font-size: 13px;
+		color: var(--color-muted);
+	}
+
+	.title {
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--color-text);
+	}
+
+	@media (max-width: 860px) {
+		.spacer {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,68 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	currentPage: number;
+	lastPage: number;
+	// ページ番号から URL を作る(1ページ目は base そのもの)
+	base?: string;
+}
+
+const { currentPage, lastPage, base = '/' } = Astro.props;
+const href = (n: number) => (n === 1 ? base : `${base}${n}/`);
+const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+---
+
+{
+	lastPage > 1 && (
+		<nav aria-label="ページ送り" class="pagination mono">
+			{currentPage > 1 && (
+				<a href={href(currentPage - 1)} aria-label="前のページ" class="item">
+					<Icon name="chevron-left" size={18} />
+				</a>
+			)}
+			{pages.map((n) => (
+				<a href={href(n)} aria-current={n === currentPage ? 'page' : undefined} class="item">
+					{n}
+				</a>
+			))}
+			{currentPage < lastPage && (
+				<a href={href(currentPage + 1)} aria-label="次のページ" class="item">
+					<Icon name="chevron-right" size={18} />
+				</a>
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.pagination {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 8px;
+		padding-top: 8px;
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--tap-size);
+		height: var(--tap-size);
+		border-radius: 12px;
+		background: var(--color-card);
+		color: var(--color-sub);
+	}
+
+	.item:hover {
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	.item[aria-current='page'] {
+		background: var(--color-accent);
+		color: var(--color-on-accent);
+		font-weight: 700;
+	}
+</style>

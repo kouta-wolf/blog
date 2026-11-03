@@ -1,32 +1,101 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import ProfileCard from '../../components/sidebar/ProfileCard.astro';
+import CategoryList from '../../components/sidebar/CategoryList.astro';
+import Toc from '../../components/sidebar/Toc.astro';
+import MetaLine from '../../components/post/MetaLine.astro';
+import TagList from '../../components/post/TagList.astro';
+import PrevNext from '../../components/post/PrevNext.astro';
+import { formatDate, getExcerpt, getPublishedPosts, getReadingMinutes } from '../../lib/posts';
+import { site } from '../../site.config';
+import '../../styles/prose.css';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts', ({ data }) => {
-		return import.meta.env.PROD ? !data.draft : true;
-	});
-
-	return posts.map((entry) => ({
+	// 新しい順に並んでいるので、i+1 が1つ古い記事、i-1 が1つ新しい記事
+	const posts = await getPublishedPosts();
+	return posts.map((entry, i) => ({
 		params: { slug: entry.id },
-		props: { entry },
+		props: { entry, prev: posts[i + 1], next: posts[i - 1] },
 	}));
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { entry, prev, next } = Astro.props;
+const { Content, headings } = await render(entry);
 ---
 
-<Layout title={entry.data.title}>
-	<main class="max-w-2xl mx-auto px-4 py-12">
-		<article>
-			<h1 class="text-3xl font-bold mb-2 text-primary">{entry.data.title}</h1>
-			<time datetime={entry.data.date.toISOString()} class="text-sm text-secondary">
-				{entry.data.date.toLocaleDateString('ja-JP')}
-			</time>
-			<div class="prose prose-neutral mt-6 max-w-none">
-				<Content />
-			</div>
-		</article>
-	</main>
+<Layout title={entry.data.title} description={getExcerpt(entry)}>
+	<article class="card article">
+		<header class="article-header">
+			<MetaLine post={entry}>
+				<span>約 {getReadingMinutes(entry)} 分で読めます</span>
+			</MetaLine>
+			<h1>{entry.data.title}</h1>
+			<TagList tags={entry.data.tags} />
+		</header>
+		<div class="prose">
+			<Content />
+		</div>
+		<footer class="article-footer">
+			<span>{site.author} · <time datetime={formatDate(entry.data.date)} class="mono">{formatDate(entry.data.date)}</time></span>
+			<a href={site.license.url} rel="license" class="tap-target">{site.license.name}</a>
+		</footer>
+	</article>
+	<PrevNext prev={prev} next={next} />
+	<ProfileCard slot="sidebar" variant="compact" />
+	<Toc slot="sidebar" headings={headings} />
+	<CategoryList slot="sidebar" />
 </Layout>
+
+<style>
+	.article {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 40px 48px;
+	}
+
+	.article-header {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	h1 {
+		font-size: 30px;
+		line-height: 1.45;
+	}
+
+	.article-footer {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 12px;
+		padding-top: 20px;
+		border-top: 1px solid var(--color-line);
+		font-size: 13px;
+		color: var(--color-muted);
+	}
+
+	.article-footer a:hover {
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 860px) {
+		.article {
+			padding: 32px 28px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.article {
+			padding: 24px 18px;
+		}
+
+		h1 {
+			font-size: 24px;
+		}
+	}
+</style>

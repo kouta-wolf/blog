@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ListHeader from '../../components/ListHeader.astro';
+import PostCard from '../../components/post/PostCard.astro';
+import ProfileCard from '../../components/sidebar/ProfileCard.astro';
+import CategoryList from '../../components/sidebar/CategoryList.astro';
+import TagCloud from '../../components/sidebar/TagCloud.astro';
+import { getPublishedPosts } from '../../lib/posts';
+import { categories } from '../../site.config';
+
+export async function getStaticPaths() {
+	const posts = await getPublishedPosts();
+	return categories.map((category) => ({
+		params: { category: category.slug },
+		props: { category, posts: posts.filter((post) => post.data.category === category.name) },
+	}));
+}
+
+const { category, posts } = Astro.props;
+---
+
+<Layout title={`カテゴリ: ${category.name}`} description={category.description}>
+	<ListHeader label="カテゴリ" title={category.name} description={category.description} count={posts.length} />
+	{posts.map((post) => <PostCard post={post} />)}
+	<ProfileCard slot="sidebar" variant="compact" />
+	<CategoryList slot="sidebar" />
+	<TagCloud slot="sidebar" />
+</Layout>

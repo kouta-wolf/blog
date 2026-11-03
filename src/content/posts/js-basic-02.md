@@ -1,6 +1,7 @@
 ---
 title: "JavaScript基礎思い出しシリーズ②：アロー関数"
 date: 2026-07-10
+category: "学習ノート"
 tags: ["JavaScript", "学習ノート"]
 ---
 

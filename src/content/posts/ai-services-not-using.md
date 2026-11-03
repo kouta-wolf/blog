@@ -1,6 +1,7 @@
 ---
 title: "自分が使わないAIサービス"
 date: 2026-07-17
+category: "AI"
 tags: ["AI活用", "雑記"]
 ---
 

@@ -1,123 +1,27 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "../layouts/Layout.astro";
-import type { GetStaticPaths } from "astro";
+import type { GetStaticPaths } from 'astro';
+import Layout from '../layouts/Layout.astro';
+import ProfileCard from '../components/sidebar/ProfileCard.astro';
+import CategoryList from '../components/sidebar/CategoryList.astro';
+import TagCloud from '../components/sidebar/TagCloud.astro';
+import PostCard from '../components/post/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { getPublishedPosts } from '../lib/posts';
 
+// URL は /, /2/, /3/ ...(既存のページ送りの URL を維持する)
 export const getStaticPaths = (async ({ paginate }) => {
-    const allPosts = await getCollection("posts", ({ data }) => {
-        return import.meta.env.PROD ? !data.draft : true;
-    });
-
-    const posts = allPosts
-        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-        .map((entry) => ({
-            slug: entry.id,
-            title: entry.data.title,
-            date: entry.data.date,
-            tags: entry.data.tags,
-        }));
-
-    return paginate(posts, { pageSize: 10 });
+	const posts = await getPublishedPosts();
+	return paginate(posts, { pageSize: 10 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-
-const allPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? !data.draft : true;
-});
-const tags = [
-    ...new Set(allPosts.flatMap((entry) => entry.data.tags ?? [])),
-].sort();
 ---
 
-<Layout title="HexWolf Blog">
-    <main
-        class="max-w-5xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10"
-    >
-        <div class="lg:col-span-2">
-            <ul class="flex flex-col gap-4">
-                {
-                    page.data.map((post) => (
-                        <li class="border border-secondary/40 rounded-lg p-5 hover:border-primary transition">
-                            <a
-                                href={`/posts/${post.slug}/`}
-                                class="text-xl font-bold hover:opacity-70 transition"
-                            >
-                                {post.title}
-                            </a>
-                            <div class="flex items-center gap-3 mt-2 text-sm text-secondary">
-                                <time datetime={post.date.toISOString()}>
-                                    {post.date.toLocaleDateString("ja-JP")}
-                                </time>
-                                {post.tags?.map((tag) => (
-                                    <span class="px-2 py-0.5 bg-secondary/20 rounded">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </li>
-                    ))
-                }
-            </ul>
-            {
-                page.lastPage > 1 && (
-                    <nav
-                        class="flex items-center justify-between mt-8"
-                        aria-label="Pagination"
-                    >
-                        {page.url.prev ? (
-                            <a
-                                href={page.url.prev}
-                                class="px-4 py-2 text-sm border border-secondary/40 rounded-lg hover:border-primary transition"
-                            >
-                                ← 前へ
-                            </a>
-                        ) : (
-                            <span />
-                        )}
-                        <span class="text-sm text-secondary">
-                            {page.currentPage} / {page.lastPage}
-                        </span>
-                        {page.url.next ? (
-                            <a
-                                href={page.url.next}
-                                class="px-4 py-2 text-sm border border-secondary/40 rounded-lg hover:border-primary transition"
-                            >
-                                次へ →
-                            </a>
-                        ) : (
-                            <span />
-                        )}
-                    </nav>
-                )
-            }
-        </div>
-        <aside class="flex flex-col gap-8">
-            <section>
-                <h2 class="text-lg font-bold mb-3 text-primary">About</h2>
-                <p class="text-sm text-letter leading-relaxed">
-                    好きな言語はRuby。プログラミング学習中です。詳しいプロフィールは
-                    <a
-                        href="https://portfolio.hexwolf.org"
-                        class="text-primary underline hover:opacity-70 transition"
-                    >
-                        ポートフォリオ
-                    </a>
-                    へ。
-                </p>
-            </section>
-            <section>
-                <h2 class="text-lg font-bold mb-3 text-primary">Tags</h2>
-                <div class="flex flex-wrap gap-2">
-                    {
-                        tags.map((tag) => (
-                            <span class="px-2 py-0.5 text-sm bg-secondary/20 rounded">
-                                {tag}
-                            </span>
-                        ))
-                    }
-                </div>
-            </section>
-        </aside>
-    </main>
+<Layout title={page.currentPage > 1 ? `${page.currentPage}ページ目` : undefined}>
+	<h1 class="visually-hidden">記事一覧</h1>
+	{page.data.map((post) => <PostCard post={post} />)}
+	<Pagination currentPage={page.currentPage} lastPage={page.lastPage} />
+	<ProfileCard slot="sidebar" />
+	<CategoryList slot="sidebar" />
+	<TagCloud slot="sidebar" />
 </Layout>

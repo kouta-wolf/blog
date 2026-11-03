@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProfileCard from '../components/sidebar/ProfileCard.astro';
+import CategoryList from '../components/sidebar/CategoryList.astro';
+import '../styles/prose.css';
+---
+
+<Layout title="About" description="このブログと書いている人について">
+	<article class="card about">
+		<h1>About</h1>
+		<div class="prose">
+			<p>
+				好きな言語はRust。プログラミング学習中です。詳しいプロフィールは<a href="https://portfolio.hexwolf.org">ポートフォリオ</a>へ。
+			</p>
+		</div>
+	</article>
+	<ProfileCard slot="sidebar" />
+	<CategoryList slot="sidebar" />
+</Layout>
+
+<style>
+	.about {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 40px 48px;
+	}
+
+	h1 {
+		padding-bottom: 20px;
+		border-bottom: 1px solid var(--color-line);
+		font-size: 30px;
+		line-height: 1.45;
+	}
+
+	@media (max-width: 860px) {
+		.about {
+			padding: 32px 28px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.about {
+			padding: 24px 18px;
+		}
+	}
+</style>

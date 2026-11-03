@@ -1,0 +1,147 @@
+---
+import Icon from '../Icon.astro';
+import { profile } from '../../site.config';
+
+interface Props {
+	// full: トップページ用(アバター大+リンク) / compact: 記事ページ用
+	variant?: 'full' | 'compact';
+}
+
+const { variant = 'full' } = Astro.props;
+---
+
+<section aria-label="プロフィール" class:list={['card', 'profile', variant]}>
+	{
+		profile.avatar ? (
+			<img src={profile.avatar} alt="" class="avatar" width={96} height={96} />
+		) : (
+			<div class="avatar" aria-hidden="true">
+				{profile.avatarText}
+			</div>
+		)
+	}
+	<div class="text">
+		<span class="name">{profile.name}</span>
+		<span class="bio">{profile.bio}</span>
+	</div>
+	{
+		variant === 'full' && (
+			<ul class="links">
+				<li>
+					<a href={profile.links.github} aria-label="GitHub">
+						<Icon name="github" />
+					</a>
+				</li>
+				<li>
+					<a href="/rss.xml" aria-label="RSSフィード">
+						<Icon name="rss" />
+					</a>
+				</li>
+				<li>
+					<a href={profile.links.website} aria-label="hexwolf.org">
+						<Icon name="terminal" />
+					</a>
+				</li>
+			</ul>
+		)
+	}
+</section>
+
+<style>
+	.profile {
+		display: flex;
+		gap: 12px;
+	}
+
+	.full {
+		flex-direction: column;
+		align-items: center;
+		padding: 24px;
+		text-align: center;
+	}
+
+	.compact {
+		align-items: center;
+		gap: 14px;
+		padding: 20px;
+	}
+
+	.avatar {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		background: var(--color-accent-soft);
+		color: var(--color-accent);
+		font-weight: 700;
+		object-fit: cover;
+	}
+
+	.full .avatar {
+		width: 96px;
+		height: 96px;
+		border-radius: 20px;
+		font-size: 36px;
+	}
+
+	.compact .avatar {
+		width: 56px;
+		height: 56px;
+		border-radius: 14px;
+		font-size: 22px;
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.name {
+		font-weight: 700;
+	}
+
+	.full .name {
+		font-size: 18px;
+	}
+
+	.compact .name {
+		font-size: 16px;
+	}
+
+	.bio {
+		color: var(--color-sub);
+		line-height: 1.6;
+	}
+
+	.full .bio {
+		font-size: 14px;
+	}
+
+	.compact .bio {
+		font-size: 13px;
+	}
+
+	.links {
+		display: flex;
+		gap: 8px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--tap-size);
+		height: var(--tap-size);
+		border-radius: var(--radius-control);
+		background: var(--color-chip);
+		color: var(--color-sub);
+	}
+
+	.links a:hover {
+		color: var(--color-accent);
+	}
+</style>

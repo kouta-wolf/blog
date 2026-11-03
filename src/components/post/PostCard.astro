@@ -1,0 +1,53 @@
+---
+import MetaLine from './MetaLine.astro';
+import TagList from './TagList.astro';
+import { getExcerpt, postHref, type Post } from '../../lib/posts';
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="card post-card">
+	<MetaLine post={post} />
+	<h2><a href={postHref(post)} class="tap-target">{post.data.title}</a></h2>
+	<p class="excerpt">{getExcerpt(post)}</p>
+	<TagList tags={post.data.tags} />
+</article>
+
+<style>
+	.post-card {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 28px 32px;
+	}
+
+	/* カテゴリチップとタイトルのクリック範囲(44px)が重ならないよう少し離す */
+	h2 {
+		margin-top: 6px;
+		font-size: 22px;
+		line-height: 1.5;
+	}
+
+	h2 a {
+		color: var(--color-text);
+	}
+
+	.excerpt {
+		font-size: 15px;
+		color: var(--color-sub);
+	}
+
+	@media (max-width: 480px) {
+		.post-card {
+			padding: 20px;
+		}
+
+		h2 {
+			font-size: 19px;
+		}
+	}
+</style>

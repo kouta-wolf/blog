@@ -1,6 +1,7 @@
 ---
 title: "JavaScript基礎思い出しシリーズ①：let/const/var・型変換・==と==="
 date: 2026-07-09
+category: "学習ノート"
 tags: ["JavaScript", "学習ノート"]
 ---
 
